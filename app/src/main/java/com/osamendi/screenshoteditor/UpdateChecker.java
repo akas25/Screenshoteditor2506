@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.osamendi.screenshoteditor.BuildConfig;
+
 import org.json.JSONObject;
 
 import okhttp3.OkHttpClient;
