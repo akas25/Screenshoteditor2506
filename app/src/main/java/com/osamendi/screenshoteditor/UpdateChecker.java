@@ -7,8 +7,6 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.osamendi.screenshoteditor.BuildConfig;
-
 import org.json.JSONObject;
 
 import okhttp3.OkHttpClient;
@@ -39,7 +37,7 @@ public class UpdateChecker {
 
                 String latestVersion = json.getString("tag_name");
 
-                String currentVersion = BuildConfig.VERSION_NAME;
+                String currentVersion = "1.1";
 
                 if (!latestVersion.equals(currentVersion)) {
 
