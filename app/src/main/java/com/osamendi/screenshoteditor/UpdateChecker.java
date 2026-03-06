@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 
 import org.json.JSONObject;
 
@@ -27,28 +29,35 @@ public class UpdateChecker {
 
                 Response response = client.newCall(request).execute();
 
+                if (!response.isSuccessful()) return;
+
                 String body = response.body().string();
 
                 JSONObject json = new JSONObject(body);
 
                 String latestVersion = json.getString("tag_name");
 
-                if(!latestVersion.equals(BuildConfig.VERSION_NAME)) {
+                String currentVersion = BuildConfig.VERSION_NAME;
 
-                    ((android.app.Activity)context).runOnUiThread(() -> {
+                if (!latestVersion.equals(currentVersion)) {
+
+                    new Handler(Looper.getMainLooper()).post(() -> {
 
                         new AlertDialog.Builder(context)
                                 .setTitle("Update Available")
-                                .setMessage("New version available")
-                                .setPositiveButton("Download", (d,w)->{
+                                .setMessage("New version available: " + latestVersion)
+                                .setCancelable(false)
+                                .setPositiveButton("Download", (d, w) -> {
 
-                                    Intent i = new Intent(Intent.ACTION_VIEW,
-                                            Uri.parse("https://github.com/akas25/Screenshoteditor2506/releases/latest"));
+                                    Intent intent = new Intent(
+                                            Intent.ACTION_VIEW,
+                                            Uri.parse("https://github.com/akas25/Screenshoteditor2506/releases/latest")
+                                    );
 
-                                    context.startActivity(i);
+                                    context.startActivity(intent);
 
                                 })
-                                .setNegativeButton("Later",null)
+                                .setNegativeButton("Later", null)
                                 .show();
 
                     });
